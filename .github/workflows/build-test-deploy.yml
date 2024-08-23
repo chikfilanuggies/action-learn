@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout repo
+      - name: Checkout repo
         uses: actions/checkout@v4
-      - name: use node.js
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
@@ -17,13 +17,13 @@ jobs:
       - run: npm run build 
 
   test:
-      needs: build
-      runs-on: ubuntu-latest
+    needs: build
+    runs-on: ubuntu-latest
 
-      steps:
-      - name: checkout repo
+    steps:
+      - name: Checkout repo
         uses: actions/checkout@v4
-      - name: use node.js
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
@@ -32,39 +32,38 @@ jobs:
 
   deploy:
     needs: test
+    runs-on: ubuntu-latest
 
-  permissions:
-        content: write
-        pages: write
-        id-token: write
+    permissions:
+      content: write
+      pages: write
+      id-token: write
 
-  environment:
-        name: Prod
-        url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+      name: Prod
+      url: ${{ steps.deployment.outputs.page_url }}
 
-runs-on: ubuntu-latest
-  
-  
-  steps:
-      - name: checkout repo
-        uses: action/checkout@v4
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: use node.js
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-      - name: configure github pages
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
         with:
           static_site_generator: next
       - run: npm install
       - run: npm run build 
-      - name: upload artifacts
+      - name: Upload artifacts
         uses: actions/upload-pages-artifact@v3
         with:
           path: './out'
-      - name: deploy
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
           
